@@ -119,9 +119,9 @@
       'dependencies': [
         'node_js2c#host',
         'deps/cares/cares.gyp:cares',
-        #'../../v8/tools/gyp/v8.gyp:v8',
+        '../../v8/tools/gyp/v8.gyp:v8',
         '../../v8/tools/gyp/v8.gyp:v8_libplatform',
-        '../../chrome/chrome.gyp:chrome_dll',
+        #'../../chrome/chrome.gyp:chrome_dll',
       ],
 
       'msvs_disabled_warnings': [4146, 4267, 4003, 4065],
