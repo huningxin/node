@@ -177,25 +177,25 @@ NODE_EXTERN extern bool force_fips_crypto;
 #endif
 
 // Whether node should open some low level hooks.
-NODE_EXTERN extern bool g_standalone_mode;
-NODE_EXTERN extern bool g_upstream_node_mode;
+__attribute__((visibility("default"))) extern bool g_standalone_mode;
+__attribute__((visibility("default"))) extern bool g_upstream_node_mode;
 
 NODE_EXTERN int Start(int argc, char *argv[]);
-NODE_EXTERN void Init(int* argc,
+__attribute__((visibility("default"))) void Init(int* argc,
                       const char** argv,
                       int* exec_argc,
                       const char*** exec_argv);
 
 class Environment;
 
-NODE_EXTERN Environment* CreateEnvironment(v8::Isolate* isolate,
+__attribute__((visibility("default"))) Environment* CreateEnvironment(v8::Isolate* isolate,
                                            struct uv_loop_s* loop,
                                            v8::Local<v8::Context> context,
                                            int argc,
                                            const char* const* argv,
                                            int exec_argc,
                                            const char* const* exec_argv);
-NODE_EXTERN void LoadEnvironment(Environment* env);
+__attribute__((visibility("default"))) void LoadEnvironment(Environment* env);
 
 // NOTE: Calling this is the same as calling
 // CreateEnvironment() + LoadEnvironment() from above.
@@ -402,7 +402,7 @@ struct node_module {
 node_module* get_builtin_module(const char *name);
 node_module* get_linked_module(const char *name);
 
-extern "C" NODE_EXTERN void node_module_register(void* mod);
+extern "C" __attribute__((visibility("default"))) void node_module_register(void* mod);
 
 #ifdef _WIN32
 # define NODE_MODULE_EXPORT __declspec(dllexport)
