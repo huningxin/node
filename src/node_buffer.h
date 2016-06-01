@@ -17,43 +17,43 @@ typedef v8::Local<v8::ArrayBuffer> (*ArrayBufferNewWith)(
     v8::Isolate* isolate, void* data, size_t size);
 typedef v8::Local<v8::Uint8Array> (*Uint8ArrayNew)(
     v8::Local<v8::ArrayBuffer> ab, size_t offset, size_t size);
-NODE_EXTERN void SetArrayBufferCreator(
+__attribute__((visibility("default"))) void SetArrayBufferCreator(
     ArrayBufferNew, ArrayBufferNewWith, Uint8ArrayNew);
 
 static const unsigned int kMaxLength =
     sizeof(int32_t) == sizeof(intptr_t) ? 0x3fffffff : 0x7fffffff;
 
-NODE_EXTERN typedef void (*FreeCallback)(char* data, void* hint);
+typedef void (*FreeCallback)(char* data, void* hint);
 
-NODE_EXTERN bool HasInstance(v8::Local<v8::Value> val);
-NODE_EXTERN bool HasInstance(v8::Local<v8::Object> val);
-NODE_EXTERN char* Data(v8::Local<v8::Value> val);
-NODE_EXTERN char* Data(v8::Local<v8::Object> val);
-NODE_EXTERN size_t Length(v8::Local<v8::Value> val);
-NODE_EXTERN size_t Length(v8::Local<v8::Object> val);
+__attribute__((visibility("default"))) bool HasInstance(v8::Local<v8::Value> val);
+__attribute__((visibility("default"))) bool HasInstance(v8::Local<v8::Object> val);
+__attribute__((visibility("default"))) char* Data(v8::Local<v8::Value> val);
+__attribute__((visibility("default"))) char* Data(v8::Local<v8::Object> val);
+__attribute__((visibility("default"))) size_t Length(v8::Local<v8::Value> val);
+__attribute__((visibility("default"))) size_t Length(v8::Local<v8::Object> val);
 
 // public constructor - data is copied
-NODE_EXTERN v8::MaybeLocal<v8::Object> Copy(v8::Isolate* isolate,
+__attribute__((visibility("default"))) v8::MaybeLocal<v8::Object> Copy(v8::Isolate* isolate,
                                             const char* data,
                                             size_t len);
 
 // public constructor
-NODE_EXTERN v8::MaybeLocal<v8::Object> New(v8::Isolate* isolate, size_t length);
+__attribute__((visibility("default"))) v8::MaybeLocal<v8::Object> New(v8::Isolate* isolate, size_t length);
 
 // public constructor from string
-NODE_EXTERN v8::MaybeLocal<v8::Object> New(v8::Isolate* isolate,
+__attribute__((visibility("default"))) v8::MaybeLocal<v8::Object> New(v8::Isolate* isolate,
                                            v8::Local<v8::String> string,
                                            enum encoding enc = UTF8);
 
 // public constructor - data is used, callback is passed data on object gc
-NODE_EXTERN v8::MaybeLocal<v8::Object> New(v8::Isolate* isolate,
+__attribute__((visibility("default"))) v8::MaybeLocal<v8::Object> New(v8::Isolate* isolate,
                                            char* data,
                                            size_t length,
                                            FreeCallback callback,
                                            void* hint);
 
 // public constructor - data is used.
-NODE_EXTERN v8::MaybeLocal<v8::Object> New(v8::Isolate* isolate,
+__attribute__((visibility("default"))) v8::MaybeLocal<v8::Object> New(v8::Isolate* isolate,
                                            char* data,
                                            size_t len);
 

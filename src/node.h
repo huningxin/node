@@ -123,19 +123,19 @@ inline v8::Local<v8::Value> UVException(int errorno,
  * cb, you will appear to leak 4-bytes for every invocation. Take heed.
  */
 
-NODE_EXTERN v8::Local<v8::Value> MakeCallback(
+__attribute__((visibility("default"))) v8::Local<v8::Value> MakeCallback(
     v8::Isolate* isolate,
     v8::Local<v8::Object> recv,
     const char* method,
     int argc,
     v8::Local<v8::Value>* argv);
-NODE_EXTERN v8::Local<v8::Value> MakeCallback(
+__attribute__((visibility("default"))) v8::Local<v8::Value> MakeCallback(
     v8::Isolate* isolate,
     v8::Local<v8::Object> recv,
     v8::Local<v8::String> symbol,
     int argc,
     v8::Local<v8::Value>* argv);
-NODE_EXTERN v8::Local<v8::Value> MakeCallback(
+__attribute__((visibility("default"))) v8::Local<v8::Value> MakeCallback(
     v8::Isolate* isolate,
     v8::Local<v8::Object> recv,
     v8::Local<v8::Function> callback,
