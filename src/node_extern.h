@@ -8,7 +8,7 @@
 #   define NODE_EXTERN __declspec(dllimport)
 # endif
 #else
-# define NODE_EXTERN /* nothing */
+# define NODE_EXTERN __attribute__((visibility("default")))
 #endif
 
 #endif  // SRC_NODE_EXTERN_H_

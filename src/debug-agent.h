@@ -39,7 +39,7 @@ class Environment;
 namespace node {
 namespace debugger {
 
-NODE_EXTERN class AgentMessage {
+class NODE_EXTERN AgentMessage {
  public:
   AgentMessage(uint16_t* val, int length) : length_(length) {
     if (val == nullptr) {
