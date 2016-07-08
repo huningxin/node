@@ -4021,6 +4021,11 @@ void Init(int* argc,
           const char** argv,
           int* exec_argc,
           const char*** exec_argv) {
+  if (argc == nullptr) {
+    g_standalone_mode = false;
+    g_upstream_node_mode = false;
+  }
+
   // Initialize prog_start_time to get relative uptime.
   prog_start_time = static_cast<double>(uv_now(uv_default_loop()));
 
