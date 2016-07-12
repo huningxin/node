@@ -269,7 +269,11 @@ MaybeLocal<Object> New(Environment* env, size_t length) {
 
   void* data;
   if (length > 0) {
+    if (g_standalone_mode) {
     data = BUFFER_MALLOC(length);
+    } else {
+    data = env->isolate()->array_buffer_allocator()->Allocate(length);
+    }
     if (data == nullptr)
       return Local<Object>();
   } else {
@@ -288,7 +292,11 @@ MaybeLocal<Object> New(Environment* env, size_t length) {
     return scope.Escape(ui);
 
   // Object failed to be created. Clean up resources.
+  if (g_standalone_mode) {
   free(data);
+  } else {
+  env->isolate()->array_buffer_allocator()->Free(data, length);
+  }
   return Local<Object>();
 }
 
@@ -314,7 +322,11 @@ MaybeLocal<Object> Copy(Environment* env, const char* data, size_t length) {
   void* new_data;
   if (length > 0) {
     CHECK_NE(data, nullptr);
+    if (g_standalone_mode) {
     new_data = malloc(length);
+    } else {
+    new_data = env->isolate()->array_buffer_allocator()->Allocate(length);
+    }
     if (new_data == nullptr)
       return Local<Object>();
     memcpy(new_data, data, length);
@@ -334,7 +346,11 @@ MaybeLocal<Object> Copy(Environment* env, const char* data, size_t length) {
     return scope.Escape(ui);
 
   // Object failed to be created. Clean up resources.
+  if (g_standalone_mode) {
   free(new_data);
+  } else {
+  env->isolate()->array_buffer_allocator()->Free(new_data, length);
+  }
   return Local<Object>();
 }
 
@@ -400,6 +416,7 @@ MaybeLocal<Object> New(Environment* env, char* data, size_t length) {
     CHECK(length <= kMaxLength);
   }
 
+  if (g_standalone_mode) {
   Local<ArrayBuffer> ab =
       ArrayBuffer::New(env->isolate(),
                        data,
@@ -411,6 +428,14 @@ MaybeLocal<Object> New(Environment* env, char* data, size_t length) {
   if (mb.FromMaybe(false))
     return scope.Escape(ui);
   return Local<Object>();
+  } else {
+    Local<Object> obj;
+    if (Buffer::Copy(env, data, length).ToLocal(&obj)) {
+      free(data);
+      return scope.Escape(obj);
+    }
+    return Local<Object>();
+  }
 }
 
 
