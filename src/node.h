@@ -176,9 +176,9 @@ NODE_EXTERN extern bool enable_fips_crypto;
 NODE_EXTERN extern bool force_fips_crypto;
 #endif
 
-// Whether node should open some low level hooks.
-NODE_EXTERN extern bool g_standalone_mode;
-NODE_EXTERN extern bool g_upstream_node_mode;
+// Indicate whether running in Crosswalk embed mode.
+NODE_EXTERN extern bool xwalk_embed;
+NODE_EXTERN void XwalkEmbedInit();
 
 NODE_EXTERN int Start(int argc, char *argv[]);
 NODE_EXTERN void Init(int* argc,
