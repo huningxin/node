@@ -413,14 +413,14 @@ extern "C" NODE_EXTERN void node_module_register(void* mod);
 #if defined(_MSC_VER)
 #pragma section(".CRT$XCU", read)
 #define NODE_C_CTOR(fn)                                               \
-  void __cdecl fn(void);                                              \
+  static void __cdecl fn(void);                                       \
   __declspec(dllexport, allocate(".CRT$XCU"))                         \
       void (__cdecl*fn ## _)(void) = fn;                              \
-  void __cdecl fn(void)
+  static void __cdecl fn(void)
 #else
 #define NODE_C_CTOR(fn)                                               \
-  void fn(void) __attribute__((constructor));                         \
-  void fn(void)
+  static void fn(void) __attribute__((constructor));                  \
+  static void fn(void)
 #endif
 
 #define NODE_MODULE_X(modname, regfunc, priv, flags)                  \
