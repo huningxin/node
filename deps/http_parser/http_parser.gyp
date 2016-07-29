@@ -43,7 +43,10 @@
         'defines': [
           'WIN32'
         ],
-      }]
+      }],
+      ['OS=="linux"', {
+        'cflags!': ['-Wstring-conversion']
+      }],
     ],
   },
 

@@ -1,4 +1,7 @@
 {
+  'variables': {
+    'uv_library%': 'static_library',
+  },
   'target_defaults': {
     'conditions': [
       ['OS != "win"', {
@@ -126,6 +129,10 @@
             '-Wall',
             '-Wextra',
             '-Wno-unused-parameter',
+            '-Wno-varargs',
+          ],
+          'cflags!': [
+            '-Wstring-conversion',
           ],
           'sources': [
             'include/uv-unix.h',

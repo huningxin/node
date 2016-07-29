@@ -130,6 +130,8 @@ using v8::Uint32Array;
 using v8::V8;
 using v8::Value;
 
+bool embed_mode = false;
+
 static bool print_eval = false;
 static bool force_repl = false;
 static bool syntax_check_only = false;
@@ -888,7 +890,11 @@ Local<Value> UVException(Isolate* isolate,
   if (!msg || !msg[0])
     msg = uv_strerror(errorno);
 
-  Local<String> js_code = OneByteString(isolate, uv_err_name(errorno));
+  const char* err_name = uv_err_name(errorno);
+  if (err_name == NULL)
+    err_name = "UnknownSystemError";
+
+  Local<String> js_code = OneByteString(isolate, err_name);
   Local<String> js_syscall = OneByteString(isolate, syscall);
   Local<String> js_path;
   Local<String> js_dest;
@@ -1191,7 +1197,9 @@ void SetupPromises(const FunctionCallbackInfo<Value>& args) {
 
   CHECK(args[0]->IsFunction());
 
-  isolate->SetPromiseRejectCallback(PromiseRejectCallback);
+  if (!embed_mode) {  // Set in blink::V8Initializier.
+    isolate->SetPromiseRejectCallback(PromiseRejectCallback);
+  }
   env->set_promise_reject_function(args[0].As<Function>());
 
   env->process_object()->Delete(
@@ -3423,8 +3431,10 @@ static void RawDebug(const FunctionCallbackInfo<Value>& args) {
 void LoadEnvironment(Environment* env) {
   HandleScope handle_scope(env->isolate());
 
-  env->isolate()->SetFatalErrorHandler(node::OnFatalError);
-  env->isolate()->AddMessageListener(OnMessage);
+  if (!embed_mode) {  // Set in blink::V8Initializier.
+    env->isolate()->SetFatalErrorHandler(node::OnFatalError);
+    env->isolate()->AddMessageListener(OnMessage);
+  }
 
   // The node.js file returns a function 'f'
   atexit(AtExit);
@@ -4227,6 +4237,32 @@ inline void PlatformInit() {
     } while (min + 1 < max);
   }
 #endif  // __POSIX__
+}
+
+
+void EmbedModeInit() {
+  embed_mode = true;
+
+  // Initialize prog_start_time to get relative uptime.
+  prog_start_time = static_cast<double>(uv_now(uv_default_loop()));
+
+  // init async debug messages dispatching
+  // Main thread uses uv_default_loop
+  uv_async_init(uv_default_loop(),
+                &dispatch_debug_messages_async,
+                DispatchDebugMessagesAsyncCallback);
+  uv_unref(reinterpret_cast<uv_handle_t*>(&dispatch_debug_messages_async));
+
+  // Unconditionally force typed arrays to allocate outside the v8 heap. This
+  // is to prevent memory pointers from being moved around that are returned by
+  // Buffer::Data().
+  const char no_typed_array_heap[] = "--typed_array_max_size_in_heap=0";
+  V8::SetFlagsFromString(no_typed_array_heap, sizeof(no_typed_array_heap) - 1);
+
+  // We should set node_is_initialized here instead of in node::Start,
+  // otherwise embedders using node::Init to initialize everything will not be
+  // able to set it and native modules will not load for them.
+  node_is_initialized = true;
 }
 
 

@@ -4,13 +4,15 @@
 
 {
   'variables': {
-    'is_clang': 0,
+    'is_clang': 1,
     'gcc_version': 0,
     'openssl_no_asm%': 0,
     'llvm_version%': 0,
     'xcode_version%': 0,
     'gas_version%': 0,
-    'openssl_fips%': 'false',
+    'openssl_fips%': '',
+    'library%': 'static_library',
+    'node_byteorder%': 'little',
   },
   'targets': [
     {
@@ -167,7 +169,7 @@
         ]
       }],
       ['is_clang==1 or gcc_version>=43', {
-        'cflags': ['-Wno-old-style-declaration'],
+        'cflags': ['-Qunused-arguments'],
       }],
       ['OS=="solaris"', {
         'defines': ['__EXTENSIONS__'],

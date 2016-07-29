@@ -8,6 +8,7 @@
 #if HAVE_INSPECTOR
 #include "inspector_agent.h"
 #endif
+#include "node_extern.h"
 #include "handle_wrap.h"
 #include "req-wrap.h"
 #include "tree.h"
@@ -300,7 +301,7 @@ struct node_ares_task {
 
 RB_HEAD(node_ares_task_list, node_ares_task);
 
-class Environment {
+class NODE_EXTERN Environment {
  public:
   class AsyncHooks {
    public:

@@ -1,5 +1,16 @@
 {
   'variables': {
+    'v8_use_snapshot': 'true',
+    'node_shared': 'true',
+    'node_use_bundled_v8': 'false',
+    'node_enable_d8': 'false',
+    'node_tag': '',
+    'node_release_urlbase': '',
+    'icu_small': 'false',
+    'v8_inspector': 'false',
+    'openssl_fips': '',
+    'OPENSSL_PRODUCT': '',
+    'v8_postmortem_support': 'false',
     'v8_use_snapshot%': 'false',
     'node_use_dtrace%': 'false',
     'node_use_lttng%': 'false',
@@ -126,6 +137,8 @@
 
       'dependencies': [
         'node_js2c#host',
+        '<(DEPTH)/v8/tools/gyp/v8.gyp:v8',
+        '<(DEPTH)/v8/tools/gyp/v8.gyp:v8_libplatform'
       ],
 
       'include_dirs': [
@@ -133,8 +146,8 @@
         'tools/msvs/genfiles',
         'deps/uv/src/ares',
         '<(SHARED_INTERMEDIATE_DIR)', # for node_natives.h
+        '<(DEPTH)/v8',
       ],
-
       'sources': [
         'src/debug-agent.cc',
         'src/async-wrap.cc',
@@ -189,6 +202,7 @@
         'src/node.h',
         'src/node_buffer.h',
         'src/node_constants.h',
+        'src/node_extern.h',
         'src/node_file.h',
         'src/node_http_parser.h',
         'src/node_internals.h',
@@ -556,6 +570,9 @@
         }],
         [ 'OS=="sunos"', {
           'ldflags': [ '-Wl,-M,/usr/lib/ld/map.noexstk' ],
+        }],
+        [ 'OS=="linux"', {
+          'cflags': ['-Wno-unused-result', '-Wno-ignored-attributes'],
         }],
       ],
     },

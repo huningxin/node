@@ -1,4 +1,7 @@
 {
+  'variables': {
+    'library%': 'static_library',
+  },
   'target_defaults': {
     'conditions': [
       ['OS!="win"', {

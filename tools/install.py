@@ -149,6 +149,7 @@ def headers(action):
     'config.gypi',
     'src/node.h',
     'src/node_buffer.h',
+    'src/node_extern.h',
     'src/node_object_wrap.h',
     'src/node_version.h',
   ], 'include/node/')

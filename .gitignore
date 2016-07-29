@@ -46,7 +46,6 @@ ipch/
 .vscode/
 
 /config.mk
-/config.gypi
 /config_fips.gypi
 *-nodegyp*
 /gyp-mac-tool

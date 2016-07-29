@@ -11,6 +11,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "node_extern.h"
+
 // OSX 10.9 defaults to libc++ which provides a C++11 <type_traits> header.
 #if defined(__APPLE__) && __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ < 1090
 #define USE_TR1_TYPE_TRAITS
@@ -33,7 +35,7 @@ namespace node {
 // The slightly odd function signature for Assert() is to ease
 // instruction cache pressure in calls from ASSERT and CHECK.
 NO_RETURN void Abort();
-NO_RETURN void Assert(const char* const (*args)[4]);
+NO_RETURN NODE_EXTERN void Assert(const char* const (*args)[4]);
 void DumpBacktrace(FILE* fp);
 
 #ifdef USE_TR1_TYPE_TRAITS
