@@ -148,7 +148,7 @@ inline Environment* Environment::GetCurrent(v8::Local<v8::Context> context) {
 
 inline Environment* Environment::GetCurrent(
     const v8::FunctionCallbackInfo<v8::Value>& info) {
-  ASSERT(info.Data()->IsExternal());
+  //ASSERT(info.Data()->IsExternal());
   return static_cast<Environment*>(info.Data().As<v8::External>()->Value());
 }
 

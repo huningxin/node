@@ -1,15 +1,7 @@
 #ifndef SRC_NODE_H_
 #define SRC_NODE_H_
 
-#ifdef _WIN32
-# ifndef BUILDING_NODE_EXTENSION
-#   define NODE_EXTERN __declspec(dllexport)
-# else
-#   define NODE_EXTERN __declspec(dllimport)
-# endif
-#else
-# define NODE_EXTERN /* nothing */
-#endif
+#include "node_extern.h"
 
 #ifdef BUILDING_NODE_EXTENSION
 # undef BUILDING_V8_SHARED
@@ -183,6 +175,10 @@ NODE_EXTERN extern bool no_deprecation;
 NODE_EXTERN extern bool enable_fips_crypto;
 NODE_EXTERN extern bool force_fips_crypto;
 #endif
+
+// Indicate whether running in Crosswalk embed mode.
+NODE_EXTERN extern bool embed_mode;
+NODE_EXTERN void EmbedModeInit();
 
 NODE_EXTERN int Start(int argc, char *argv[]);
 NODE_EXTERN void Init(int* argc,
