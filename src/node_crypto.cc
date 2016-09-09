@@ -18,6 +18,17 @@
 // certverifier/CNNICHashWhitelist.inc
 #include "CNNICHashWhitelist.inc"
 
+#if defined(OS_ANDROID)
+//TODO: Enable these API on ANDROID
+#define FIPS_mode
+#define SSL_get_server_tmp_key
+#define SSL_set1_verify_cert_store
+#define SSL_get_server_tmp_key
+#define SSL_set1_verify_cert_store
+#define EVP_CIPHER_do_all_sorted
+#define EVP_MD_do_all_sorted
+#endif
+
 #include <errno.h>
 #include <limits.h>  // INT_MAX
 #include <math.h>
@@ -2431,6 +2442,8 @@ void SSLWrap<Base>::SetSNIContext(SecureContext* sc) {
 
 template <class Base>
 int SSLWrap<Base>::SetCACerts(SecureContext* sc) {
+#if !defined(OS_ANDROID)
+  //TODO:
   int err = SSL_set1_verify_cert_store(ssl_, SSL_CTX_get_cert_store(sc->ctx_));
   if (err != 1)
     return err;
@@ -2440,6 +2453,7 @@ int SSLWrap<Base>::SetCACerts(SecureContext* sc) {
 
   // NOTE: `SSL_set_client_CA_list` takes the ownership of `list`
   SSL_set_client_CA_list(ssl_, list);
+#endif
   return 1;
 }
 
@@ -5781,11 +5795,14 @@ void SetEngine(const FunctionCallbackInfo<Value>& args) {
 #endif  // !OPENSSL_NO_ENGINE
 
 void GetFipsCrypto(const FunctionCallbackInfo<Value>& args) {
+#if !defined(OS_ANDROID)
+  //TODO:
   if (FIPS_mode()) {
     args.GetReturnValue().Set(1);
   } else {
     args.GetReturnValue().Set(0);
   }
+#endif
 }
 
 void SetFipsCrypto(const FunctionCallbackInfo<Value>& args) {
