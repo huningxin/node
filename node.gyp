@@ -233,6 +233,19 @@
             'NODE_RELEASE_URLBASE="<(node_release_urlbase)"',
           ]
         }],
+        [ 'OS=="android"', {
+          'defines': [ 'OS_ANDROID=1' ],
+          'dependencies': [
+            '../../v8/tools/gyp/v8.gyp:v8',
+            '../../v8/tools/gyp/v8.gyp:v8_libplatform',
+            '../boringssl/boringssl.gyp:boringssl'
+          ],
+          'include_dirs': [
+            '../boringssl/src/include',
+            '../../v8',
+            '../../v8/include'
+          ],
+        }],
         [ 'v8_enable_i18n_support==1', {
           'defines': [ 'NODE_HAVE_I18N_SUPPORT=1' ],
           'dependencies': [
@@ -251,7 +264,7 @@
             'deps/v8/src/third_party/vtune/v8vtune.gyp:v8_vtune'
           ],
         }],
-        [ 'node_use_openssl=="true"', {
+        [ 'node_use_openssl=="true" and OS=="linux"', {
           'defines': [ 'HAVE_OPENSSL=1' ],
           'sources': [
             'src/node_crypto.cc',
